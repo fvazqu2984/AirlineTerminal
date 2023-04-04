@@ -116,6 +116,10 @@ public class FileReader {
         return customerMap;
     }
 
+    /**
+     * Method that creates a hashmap of airport objects
+     * @return returns hashmap with airport objects
+     */
     public static HashMap<String, Airport> makeAirportsMap(){
 
         HashMap<String, Airport> airportMap = new HashMap<>();
@@ -126,8 +130,6 @@ public class FileReader {
             Scanner sc = new Scanner(text);
             sc.nextLine();
             sc.useDelimiter(",|\\r\\n");
-
-            //int arrayIndex = 1;
 
             while (sc.hasNextLine()) {
                 sc.next();
@@ -168,6 +170,7 @@ public class FileReader {
                 double airportTotalFees = 0;
                 double moneyEarned = 0;
 
+                //Creates a new airport object and puts it in the hashmap
                 airportMap.put(airportCode, new Airport(airportCode, airportName, airportCity, airportState, airportCountry, airportFee, airportLounge, airportTotalFees, moneyEarned));
                 
             }
@@ -182,14 +185,19 @@ public class FileReader {
 
     }
 
+    /**
+     * Method that creates a hashmap with instructions objects
+     * @return Returns hashmap with instructions objects
+     */
     public static HashMap<Integer, AutoBuyer> makeInstructionsMap(){
 
         HashMap<Integer, AutoBuyer> instructionMap = new HashMap<>();
 
         try{
-            Scanner sc = new Scanner(new File("/Users/frank/PA4/AutoPurchaser10K.csv"));
+            File file = new File("/Users/frank/PA4/AutoPurchaser10K.csv");
+            Scanner sc = new Scanner(file);
             sc.nextLine();
-            sc.useDelimiter(",|\\r\\n");
+            sc.useDelimiter(",|\r?\n"); 
 
             int arrayIndex = 1;
 
@@ -201,22 +209,18 @@ public class FileReader {
                 String originAirport = sc.next();
                 String destinationAirport = sc.next();
                 String ticketType = sc.next();
-                int ticketQuantity = sc.nextInt();
+                int ticketQuantity = sc.nextInt();;
 
                 //Creates instructions objects and stores then in array
-                instructionMap.put(arrayIndex, new AutoBuyer(firstName, lastName, action, flightID, originAirport, destinationAirport, ticketType, ticketQuantity)); 
-
+                instructionMap.put(arrayIndex, new AutoBuyer(firstName, lastName, action, flightID, originAirport, destinationAirport, ticketType, ticketQuantity)); //ticketquantity
                 arrayIndex++;
-        }
-
+                
+            }
         sc.close();
 
         }catch(Exception FileNotFoundException){
-            System.out.println("AutoBuyerFileNotFoundException");
+            System.out.println(" ");
         }
-
         return instructionMap;
-
-    
     }
 }

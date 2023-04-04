@@ -30,13 +30,10 @@ public class RunFlight{
      * @param args argument taken into the main
      */
     public static void main(String[] args){
-        HashMap<Integer, AutoBuyer> autoInstructionMap = FileReader.makeInstructionsMap();
         HashMap<String, Airport> airportMap = FileReader.makeAirportsMap();
         HashMap<Integer, Customer> customerMap = FileReader.makeCustomerMap();
         HashMap<Integer, Flight> flightMap = FileReader.makeFlightMap();
-        
-
-        System.out.println(autoInstructionMap.size());
+        HashMap<Integer, AutoBuyer> autoInstructionMap = FileReader.makeInstructionsMap();
 
         //Creates file where user actions are going to be logged
         File file1 = new File("log.txt");
@@ -151,7 +148,7 @@ public class RunFlight{
                                     break;
                                 }
                             }else if(flightSearchInput == 1){
-                                //Ask user for flight ID to buy tickets for
+                                //Ask user for flight codes to buy tickets for
                                 System.out.println("Please enter Aiport Origin Code");
                                 String airOriginCode = sc.next();
                                 System.out.println("Please enter Aiport Destination Code");
@@ -251,7 +248,13 @@ public class RunFlight{
                             System.out.println("Enter customer username to print ticket");
                             String customerSearch = sc.next();
 
-                            CsvWriter.writeElectronicTicket(customerSearch + ".txt", flightTicketList, flightMap, customerSearch);
+                            for(int i =1; i<customerMap.size(); i++){
+                                if(customerMap.get(i).getUserName().equals(customerSearch)){
+
+                                    CsvWriter.writeElectronicTicket(customerSearch + ".txt", flightTicketList, flightMap, customerSearch);
+                                    break;
+                                }
+                            }
 
                             inElectronicTicketMenu = false;
                         }
@@ -259,7 +262,8 @@ public class RunFlight{
                         while(inAutoBuyerMenu){
                             System.out.println("Auto Buyer Menu");
                             autoBuySystem(autoInstructionMap, customerMap, flightMap, airportMap, ticketArray, flightTicketList, securityFee, minerFee, confirmationNumber, savings, flightTotalTax, flightTotalAirlineFee, flightTotalSecurityFee, totalAirportFees);
-                            System.out.println("Tickets bougth");
+                            System.out.println("All tickets bought");
+                            pw.println(customerMap.get(userIDIndex).getUserName() + " has auto bought all tickets");
                             inAutoBuyerMenu = false;
 
                         }
@@ -285,6 +289,7 @@ public class RunFlight{
                                     break;
                                 }                
                             }
+                            pw.println(customerMap.get(userIDIndex).getUserName() + " has vieved airport information");
 
                             inAirportMenu = false;
                         }
@@ -1045,280 +1050,304 @@ public class RunFlight{
 
     }
 
+    /**
+     * Method that reads auto purchaser file and buys all tickets in the file automatically
+     * @param autoInstructionsMap  Hashmap that has instructions objects to buy tickets
+     * @param customerMap Hashmap containing customer objects
+     * @param flightMap Hashmap containing flight objects
+     * @param airportMap Hashmap containing airport objects
+     * @param ticketArray Hashmap list of tickets for customer use
+     * @param flightTicketList Hashmap list of tickets for employee use
+     * @param securityFee security fee per ticket
+     * @param minerFee miner fee per transaction
+     * @param confirmationNumber number of ticket
+     * @param savings Total amount saved
+     * @param flightTotalTax Total amount collected from sales tax
+     * @param flightTotalAirlineFee Total amount collected from airline fees
+     * @param flightTotalSecurityFee Total amount collected from security fees
+     * @param totalAirportFees Total amount of fees collected per airport
+     */
     public static void autoBuySystem(HashMap<Integer, AutoBuyer> autoInstructionsMap, HashMap<Integer, Customer> customerMap, HashMap<Integer, Flight> flightMap, HashMap<String, Airport> airportMap, HashMap<Integer,Ticket> ticketArray, HashMap<Integer,Ticket> flightTicketList, double securityFee, double minerFee, int confirmationNumber, double savings, double flightTotalTax, double flightTotalAirlineFee, double flightTotalSecurityFee, double totalAirportFees){
 
         String userName = "";
         int userIDIndex = 0;
         double totalPrice = 0;
         double flightSurcharge = 0;
-
-        System.out.println("test 1");
         System.out.println(autoInstructionsMap.size());
 
 
     
         for(int i = 1; i<= autoInstructionsMap.size(); i++){
 
-            System.out.println("test 2");
-
             //Find username based on name
             for(int j = 1; j<= customerMap.size(); j++){
                 String autoName = autoInstructionsMap.get(i).getFirstName() + autoInstructionsMap.get(i).getLastName();
                 String customerName = customerMap.get(j).getFirstName() + customerMap.get(j).getLastName();
-
+                
                 if(autoName.equals(customerName)){
                     userName = customerMap.get(j).getUserName();
                     userIDIndex = customerMap.get(j).getID();
-                    System.out.println("Username auto buy: " + userName);
-                }
-            }
+                    System.out.println("Username auto buy: " + userName + " " + autoInstructionsMap.get(i).getTicketType());
+                    
 
-            int flightID = autoInstructionsMap.get(i).getFlightID();
-            String ticketType = autoInstructionsMap.get(i).getTicketType();
-            int ticketQuantity = autoInstructionsMap.get(i).getTicketQuantity();
-            String seatType = ticketType;
+                    int flightID = autoInstructionsMap.get(i).getFlightID();
+                    String ticketType = autoInstructionsMap.get(i).getTicketType();
+                    int ticketQuantity = autoInstructionsMap.get(i).getTicketQuantity();
+                    String seatType = ticketType;
 
-            if(ticketType == "First Class"){
+                if(ticketType.equals("First Class")){
 
-                if(flightMap.get(flightID).getFlightType().equals("International")){
-                    flightSurcharge = flightMap.get(flightID).getSurcharge();
-                }else{
-                    flightSurcharge = 0;
-                }
-
-                if((flightMap.get(flightID).getFirstClassSeats() >= ticketQuantity) && ticketQuantity > 0 && ticketQuantity <=8){
-                    //Calculate price for all tickets
-                    double ticketcost = flightMap.get(flightID).getFirstClassPrice();
-                    double customerDiscount = ticketcost * .05;
-                    double employeeDiscountFC = ticketcost * .50;
-                    int seatsPurchased = ticketQuantity;
-
-                    //Checks if user is employee to give discount
-                    if(customerMap.get(userIDIndex).getRole().equals("Employee")){
-                        ticketcost = ticketcost - employeeDiscountFC;
+                    if(flightMap.get(flightID).getFlightType().equals("International")){
+                        flightSurcharge = flightMap.get(flightID).getSurcharge();
+                    }else{
+                        flightSurcharge = 0;
                     }
 
-                    //Checks for minerline member discount
-                    if(customerMap.get(userIDIndex).getMinerAirMembership() == true){
-                        ticketcost = ticketcost - customerDiscount;
-                    }
+                    if((flightMap.get(flightID).getFirstClassSeats() >= ticketQuantity) && ticketQuantity > 0 && ticketQuantity <=8){
+                        //Calculate price for all tickets
+                        double ticketcost = flightMap.get(flightID).getFirstClassPrice();
+                        double customerDiscount = ticketcost * .05;
+                        double employeeDiscountFC = ticketcost * .50;
+                        int seatsPurchased = ticketQuantity;
 
-                    //Fees
-                    double originFee = flightMap.get(flightID).getOriginAirportFee();
-                    double destinationFee = flightMap.get(flightID).getDestinationAirportFee();
-                    double fee = flightSurcharge + securityFee + originFee + destinationFee;
-                    totalPrice = ticketcost + fee;
-                    totalPrice = totalPrice * ticketQuantity;
-                    totalPrice = totalPrice + minerFee;
+                        //Checks if user is employee to give discount
+                        if(customerMap.get(userIDIndex).getRole().equals("Employee")){
+                            ticketcost = ticketcost - employeeDiscountFC;
+                        }
 
-                    //Taxes
-                    double totalTax = totalPrice * .0825;
-                    double totalAfterTax = totalPrice + totalTax;
+                        //Checks for minerline member discount
+                        if(customerMap.get(userIDIndex).getMinerAirMembership() == true){
+                            ticketcost = ticketcost - customerDiscount;
+                        }
 
-                    //Checks if the customer has enough money for the purchase
-                    if(customerMap.get(userIDIndex).getMoneyAvailable() >= totalPrice){
+                        //Fees
+                        double originFee = flightMap.get(flightID).getOriginAirportFee();
+                        double destinationFee = flightMap.get(flightID).getDestinationAirportFee();
+                        double fee = flightSurcharge + securityFee + originFee + destinationFee;
+                        totalPrice = ticketcost + fee;
+                        totalPrice = totalPrice * ticketQuantity;
+                        totalPrice = totalPrice + minerFee;
 
-                        ticketArray.put(confirmationNumber, new Ticket(confirmationNumber, flightID , ticketQuantity, seatsPurchased, seatType, totalAfterTax));
-                        flightTicketList.put(confirmationNumber, new Ticket(confirmationNumber, flightID, customerMap.get(userIDIndex).getUserName(), seatsPurchased, seatType, totalAfterTax));
+                        //Taxes
+                        double totalTax = totalPrice * .0825;
+                        double totalAfterTax = totalPrice + totalTax;
 
-                        //Updates the money available for the customer
-                        double updateCustomerMoney = customerMap.get(userIDIndex).getMoneyAvailable() - totalAfterTax;
-                        customerMap.get(userIDIndex).setMoneyAvailable(updateCustomerMoney);
+                        //Checks if the customer has enough money for the purchase
+                        if(customerMap.get(userIDIndex).getMoneyAvailable() >= totalPrice){
 
-                        //Updates seats of purchased flight
-                        int updateFlightSeats = seatsPurchased + flightMap.get(flightID).getFirstClassSeats();
-                        flightMap.get(flightID).setFirstClassSeats(updateFlightSeats);
+                            ticketArray.put(confirmationNumber, new Ticket(confirmationNumber, flightID , ticketQuantity, seatsPurchased, seatType, totalAfterTax));
+                            flightTicketList.put(confirmationNumber, new Ticket(confirmationNumber, flightID, customerMap.get(userIDIndex).getUserName(), seatsPurchased, seatType, totalAfterTax));
 
-                        //Update Amount Values
-                        double firstRevenue = flightMap.get(flightID).getTotalFirstClassRevenue() + totalAfterTax;
-                        flightMap.get(flightID).setTotalFirstClassRevenue(firstRevenue);
+                            //Updates the money available for the customer
+                            double updateCustomerMoney = customerMap.get(userIDIndex).getMoneyAvailable() - totalAfterTax;
+                            customerMap.get(userIDIndex).setMoneyAvailable(updateCustomerMoney);
 
-                        int firstSeats = flightMap.get(flightID).getFirstClassSeatsSold() + seatsPurchased;
-                        flightMap.get(flightID).setFirstClassSeatsSold(firstSeats);
+                            //Updates seats of purchased flight
+                            int updateFlightSeats = seatsPurchased + flightMap.get(flightID).getFirstClassSeats();
+                            flightMap.get(flightID).setFirstClassSeats(updateFlightSeats);
 
-                        //Update Taxes and fees
-                        savings = flightMap.get(flightID).getSavings() + savings;
-                        flightTotalAirlineFee = flightMap.get(flightID).getFlightTotalAirlineFee() + minerFee;
-                        flightTotalSecurityFee = flightMap.get(flightID).getFlightTotalSecurityFee() + (securityFee * ticketQuantity);
-                        flightTotalTax = flightMap.get(flightID).getFlightTotalTax() + totalTax;
-                        flightMap.get(flightID).setSavings(savings);
-                        flightMap.get(flightID).setFlightTotalAirlineFee(flightTotalAirlineFee);
-                        flightMap.get(flightID).setFlightTotalSecurityFee(flightTotalSecurityFee);
-                        flightMap.get(flightID).setFlightTotalTax(flightTotalTax);
+                            //Update Amount Values
+                            double firstRevenue = flightMap.get(flightID).getTotalFirstClassRevenue() + totalAfterTax;
+                            flightMap.get(flightID).setTotalFirstClassRevenue(firstRevenue);
 
-                        String currentAirport = flightMap.get(flightID).getOriginCode();
-                        totalAirportFees = airportMap.get(currentAirport).getAirportTotalFees() + originFee + destinationFee;
-                        airportMap.get(currentAirport).setAirportTotalFees(totalAirportFees);
+                            int firstSeats = flightMap.get(flightID).getFirstClassSeatsSold() + seatsPurchased;
+                            flightMap.get(flightID).setFirstClassSeatsSold(firstSeats);
+
+                            //Update Taxes and fees
+                            savings = flightMap.get(flightID).getSavings() + savings;
+                            flightTotalAirlineFee = flightMap.get(flightID).getFlightTotalAirlineFee() + minerFee;
+                            flightTotalSecurityFee = flightMap.get(flightID).getFlightTotalSecurityFee() + (securityFee * ticketQuantity);
+                            flightTotalTax = flightMap.get(flightID).getFlightTotalTax() + totalTax;
+                            flightMap.get(flightID).setSavings(savings);
+                            flightMap.get(flightID).setFlightTotalAirlineFee(flightTotalAirlineFee);
+                            flightMap.get(flightID).setFlightTotalSecurityFee(flightTotalSecurityFee);
+                            flightMap.get(flightID).setFlightTotalTax(flightTotalTax);
+
+                            String currentAirport = flightMap.get(flightID).getOriginCode();
+                            totalAirportFees = airportMap.get(currentAirport).getAirportTotalFees() + originFee + destinationFee;
+                            airportMap.get(currentAirport).setAirportTotalFees(totalAirportFees);
         
-                        confirmationNumber = confirmationNumber + 1;
-                        int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
-                        customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
-                    }else
-                        System.out.println("Insufficient Funds for transaction" + i);
-                }else 
-                    System.out.println("No seats available for transaction " + i);
+                            confirmationNumber = confirmationNumber + 1;
+                            int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
+                            customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
 
-            }else if(ticketType == "Business Class"){
-                if(flightMap.get(flightID).getFlightType().equals("International")){
-                    flightSurcharge = flightMap.get(flightID).getSurcharge();
-                }else{
-                    flightSurcharge = 0;
-                }
+                            System.out.println("Ticket bought");
+                        }else
+                            System.out.println("Insufficient Funds for transaction " + i);
+                    }else 
+                        System.out.println("No seats available for transaction " + i);
 
-                if((flightMap.get(flightID).getBusinessClassSeats() >= ticketQuantity) && ticketQuantity > 0 && ticketQuantity <=8){
-                    //Calculate price for all tickets
-                    double ticketcost = flightMap.get(flightID).getBusinessClassPrice();
-                    double customerDiscount = ticketcost * .05;
-                    double employeeDiscountFC = ticketcost * .50;
-                    int seatsPurchased = ticketQuantity;
-
-                    //Checks if user is employee to give discount
-                    if(customerMap.get(userIDIndex).getRole().equals("Employee")){
-                        ticketcost = ticketcost - employeeDiscountFC;
+                }else if(ticketType.equals("Business Class")){
+                    if(flightMap.get(flightID).getFlightType().equals("International")){
+                        flightSurcharge = flightMap.get(flightID).getSurcharge();
+                    }else{
+                        flightSurcharge = 0;
                     }
 
-                    //Checks for minerline member discount
-                    if(customerMap.get(userIDIndex).getMinerAirMembership() == true){
-                        ticketcost = ticketcost - customerDiscount;
-                    }
+                    if((flightMap.get(flightID).getBusinessClassSeats() >= ticketQuantity) && ticketQuantity > 0 && ticketQuantity <=8){
+                        //Calculate price for all tickets
+                        double ticketcost = flightMap.get(flightID).getBusinessClassPrice();
+                        double customerDiscount = ticketcost * .05;
+                        double employeeDiscountFC = ticketcost * .50;
+                        int seatsPurchased = ticketQuantity;
 
-                    //Fees
-                    double originFee = flightMap.get(flightID).getOriginAirportFee();
-                    double destinationFee = flightMap.get(flightID).getDestinationAirportFee();
-                    double fee = flightSurcharge + securityFee + originFee + destinationFee;
-                    totalPrice = ticketcost + fee;
-                    totalPrice = totalPrice * ticketQuantity;
-                    totalPrice = totalPrice + minerFee;
+                        //Checks if user is employee to give discount
+                        if(customerMap.get(userIDIndex).getRole().equals("Employee")){
+                            ticketcost = ticketcost - employeeDiscountFC;
+                        }
 
-                    //Taxes
-                    double totalTax = totalPrice * .0825;
-                    double totalAfterTax = totalPrice + totalTax;
+                        //Checks for minerline member discount
+                        if(customerMap.get(userIDIndex).getMinerAirMembership() == true){
+                            ticketcost = ticketcost - customerDiscount;
+                        }
 
-                    //Checks if the customer has enough money for the purchase
-                    if(customerMap.get(userIDIndex).getMoneyAvailable() >= totalPrice){
+                        //Fees
+                        double originFee = flightMap.get(flightID).getOriginAirportFee();
+                        double destinationFee = flightMap.get(flightID).getDestinationAirportFee();
+                        double fee = flightSurcharge + securityFee + originFee + destinationFee;
+                        totalPrice = ticketcost + fee;
+                        totalPrice = totalPrice * ticketQuantity;
+                        totalPrice = totalPrice + minerFee;
 
-                        ticketArray.put(confirmationNumber, new Ticket(confirmationNumber, flightID , ticketQuantity, seatsPurchased, seatType, totalAfterTax));
-                        flightTicketList.put(confirmationNumber, new Ticket(confirmationNumber, flightID, customerMap.get(userIDIndex).getUserName(), seatsPurchased, seatType, totalAfterTax));
+                        //Taxes
+                        double totalTax = totalPrice * .0825;
+                        double totalAfterTax = totalPrice + totalTax;
 
-                        //Updates the money available for the customer
-                        double updateCustomerMoney = customerMap.get(userIDIndex).getMoneyAvailable() - totalAfterTax;
-                        customerMap.get(userIDIndex).setMoneyAvailable(updateCustomerMoney);
+                        //Checks if the customer has enough money for the purchase
+                        if(customerMap.get(userIDIndex).getMoneyAvailable() >= totalPrice){
 
-                        //Updates seats of purchased flight
-                        int updateFlightSeats = seatsPurchased + flightMap.get(flightID).getBusinessClassSeats();
-                        flightMap.get(flightID).setBusinessClassSeats(updateFlightSeats);
+                            ticketArray.put(confirmationNumber, new Ticket(confirmationNumber, flightID , ticketQuantity, seatsPurchased, seatType, totalAfterTax));
+                            flightTicketList.put(confirmationNumber, new Ticket(confirmationNumber, flightID, customerMap.get(userIDIndex).getUserName(), seatsPurchased, seatType, totalAfterTax));
 
-                        //Update Amount Values
-                        double businessRevenue = flightMap.get(flightID).getTotalBusinessClassRevenue() + totalAfterTax;
-                        flightMap.get(flightID).setTotalBusinessClassRevenue(businessRevenue);
+                            //Updates the money available for the customer
+                            double updateCustomerMoney = customerMap.get(userIDIndex).getMoneyAvailable() - totalAfterTax;
+                            customerMap.get(userIDIndex).setMoneyAvailable(updateCustomerMoney);
 
-                        int businessSeats = flightMap.get(flightID).getBusinessClassSeatsSold() + seatsPurchased;
-                        flightMap.get(flightID).setBusinessClassSeatsSold(businessSeats);
+                            //Updates seats of purchased flight
+                            int updateFlightSeats = seatsPurchased + flightMap.get(flightID).getBusinessClassSeats();
+                            flightMap.get(flightID).setBusinessClassSeats(updateFlightSeats);
 
-                        //Update Taxes and fees
-                        savings = flightMap.get(flightID).getSavings() + savings;
-                        flightTotalAirlineFee = flightMap.get(flightID).getFlightTotalAirlineFee() + minerFee;
-                        flightTotalSecurityFee = flightMap.get(flightID).getFlightTotalSecurityFee() + (securityFee * ticketQuantity);
-                        flightTotalTax = flightMap.get(flightID).getFlightTotalTax() + totalTax;
-                        flightMap.get(flightID).setSavings(savings);
-                        flightMap.get(flightID).setFlightTotalAirlineFee(flightTotalAirlineFee);
-                        flightMap.get(flightID).setFlightTotalSecurityFee(flightTotalSecurityFee);
-                        flightMap.get(flightID).setFlightTotalTax(flightTotalTax);
+                            //Update Amount Values
+                            double businessRevenue = flightMap.get(flightID).getTotalBusinessClassRevenue() + totalAfterTax;
+                            flightMap.get(flightID).setTotalBusinessClassRevenue(businessRevenue);
 
-                        String currentAirport = flightMap.get(flightID).getOriginCode();
-                        totalAirportFees = airportMap.get(currentAirport).getAirportTotalFees() + originFee + destinationFee;
-                        airportMap.get(currentAirport).setAirportTotalFees(totalAirportFees);
+                            int businessSeats = flightMap.get(flightID).getBusinessClassSeatsSold() + seatsPurchased;
+                            flightMap.get(flightID).setBusinessClassSeatsSold(businessSeats);
+
+                            //Update Taxes and fees
+                            savings = flightMap.get(flightID).getSavings() + savings;
+                            flightTotalAirlineFee = flightMap.get(flightID).getFlightTotalAirlineFee() + minerFee;
+                            flightTotalSecurityFee = flightMap.get(flightID).getFlightTotalSecurityFee() + (securityFee * ticketQuantity);
+                            flightTotalTax = flightMap.get(flightID).getFlightTotalTax() + totalTax;
+                            flightMap.get(flightID).setSavings(savings);
+                            flightMap.get(flightID).setFlightTotalAirlineFee(flightTotalAirlineFee);
+                            flightMap.get(flightID).setFlightTotalSecurityFee(flightTotalSecurityFee);
+                            flightMap.get(flightID).setFlightTotalTax(flightTotalTax);
+
+                            String currentAirport = flightMap.get(flightID).getOriginCode();
+                            totalAirportFees = airportMap.get(currentAirport).getAirportTotalFees() + originFee + destinationFee;
+                            airportMap.get(currentAirport).setAirportTotalFees(totalAirportFees);
         
-                        confirmationNumber = confirmationNumber + 1;
-                        int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
-                        customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
-                    }else
-                        System.out.println("Insufficient Funds for transaction" + i);
-                }else 
-                    System.out.println("No seats available for transaction " + i);
+                            confirmationNumber = confirmationNumber + 1;
+                            int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
+                            customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
 
-            }else if(ticketType == "Main Cabin"){
-                if(flightMap.get(flightID).getFlightType().equals("International")){
-                    flightSurcharge = flightMap.get(flightID).getSurcharge();
-                }else{
-                    flightSurcharge = 0;
-                }
+                            System.out.println("Ticket bought");
+                        }else
+                            System.out.println("Insufficient Funds for transaction " + i);
+                    }else 
+                        System.out.println("No seats available for transaction " + i);
 
-                if((flightMap.get(flightID).getMainCabinSeats() >= ticketQuantity) && ticketQuantity > 0 && ticketQuantity <=8){
-                    //Calculate price for all tickets
-                    double ticketcost = flightMap.get(flightID).getMainCabinPrice();
-                    double customerDiscount = ticketcost * .05;
-                    double employeeDiscountFC = ticketcost * .50;
-                    int seatsPurchased = ticketQuantity;
-
-                    //Checks if user is employee to give discount
-                    if(customerMap.get(userIDIndex).getRole().equals("Employee")){
-                        ticketcost = ticketcost - employeeDiscountFC;
+                }else if(ticketType.equals("Main Cabin")){
+                    if(flightMap.get(flightID).getFlightType().equals("International")){
+                        flightSurcharge = flightMap.get(flightID).getSurcharge();
+                    }else{
+                        flightSurcharge = 0;
                     }
 
-                    //Checks for minerline member discount
-                    if(customerMap.get(userIDIndex).getMinerAirMembership() == true){
-                        ticketcost = ticketcost - customerDiscount;
-                    }
+                    if((flightMap.get(flightID).getMainCabinSeats() >= ticketQuantity) && ticketQuantity > 0 && ticketQuantity <=8){
+                        //Calculate price for all tickets
+                        double ticketcost = flightMap.get(flightID).getMainCabinPrice();
+                        double customerDiscount = ticketcost * .05;
+                        double employeeDiscountFC = ticketcost * .50;
+                        int seatsPurchased = ticketQuantity;
 
-                    //Fees
-                    double originFee = flightMap.get(flightID).getOriginAirportFee();
-                    double destinationFee = flightMap.get(flightID).getDestinationAirportFee();
-                    double fee = flightSurcharge + securityFee + originFee + destinationFee;
-                    totalPrice = ticketcost + fee;
-                    totalPrice = totalPrice * ticketQuantity;
-                    totalPrice = totalPrice + minerFee;
+                        //Checks if user is employee to give discount
+                        if(customerMap.get(userIDIndex).getRole().equals("Employee")){
+                            ticketcost = ticketcost - employeeDiscountFC;
+                        }
 
-                    //Taxes
-                    double totalTax = totalPrice * .0825;
-                    double totalAfterTax = totalPrice + totalTax;
+                        //Checks for minerline member discount
+                        if(customerMap.get(userIDIndex).getMinerAirMembership() == true){
+                            ticketcost = ticketcost - customerDiscount;
+                        }
 
-                    //Checks if the customer has enough money for the purchase
-                    if(customerMap.get(userIDIndex).getMoneyAvailable() >= totalPrice){
+                        //Fees
+                        double originFee = flightMap.get(flightID).getOriginAirportFee();
+                        double destinationFee = flightMap.get(flightID).getDestinationAirportFee();
+                        double fee = flightSurcharge + securityFee + originFee + destinationFee;
+                        totalPrice = ticketcost + fee;
+                        totalPrice = totalPrice * ticketQuantity;
+                        totalPrice = totalPrice + minerFee;
 
-                        ticketArray.put(confirmationNumber, new Ticket(confirmationNumber, flightID , ticketQuantity, seatsPurchased, seatType, totalAfterTax));
-                        flightTicketList.put(confirmationNumber, new Ticket(confirmationNumber, flightID, customerMap.get(userIDIndex).getUserName(), seatsPurchased, seatType, totalAfterTax));
+                        //Taxes
+                        double totalTax = totalPrice * .0825;
+                        double totalAfterTax = totalPrice + totalTax;
 
-                        //Updates the money available for the customer
-                        double updateCustomerMoney = customerMap.get(userIDIndex).getMoneyAvailable() - totalAfterTax;
-                        customerMap.get(userIDIndex).setMoneyAvailable(updateCustomerMoney);
+                        //Checks if the customer has enough money for the purchase
+                        if(customerMap.get(userIDIndex).getMoneyAvailable() >= totalPrice){
 
-                        //Updates seats of purchased flight
-                        int updateFlightSeats = seatsPurchased + flightMap.get(flightID).getMainCabinSeats();
-                        flightMap.get(flightID).setMainCabinSeats(updateFlightSeats);
+                            ticketArray.put(confirmationNumber, new Ticket(confirmationNumber, flightID , ticketQuantity, seatsPurchased, seatType, totalAfterTax));
+                            flightTicketList.put(confirmationNumber, new Ticket(confirmationNumber, flightID, customerMap.get(userIDIndex).getUserName(), seatsPurchased, seatType, totalAfterTax));
 
-                        //Update Amount Values
-                        double mainRevenue = flightMap.get(flightID).getTotalMainCabinRevenue() + totalAfterTax;
-                        flightMap.get(flightID).setTotalMainCabinRevenue(mainRevenue);
+                            //Updates the money available for the customer
+                            double updateCustomerMoney = customerMap.get(userIDIndex).getMoneyAvailable() - totalAfterTax;
+                            customerMap.get(userIDIndex).setMoneyAvailable(updateCustomerMoney);
 
-                        int firstSeats = flightMap.get(flightID).getMainCabinSeatsSold() + seatsPurchased;
-                        flightMap.get(flightID).setMainCabinSeatsSold(firstSeats);
+                            //Updates seats of purchased flight
+                            int updateFlightSeats = seatsPurchased + flightMap.get(flightID).getMainCabinSeats();
+                            flightMap.get(flightID).setMainCabinSeats(updateFlightSeats);
 
-                        //Update Taxes and fees
-                        savings = flightMap.get(flightID).getSavings() + savings;
-                        flightTotalAirlineFee = flightMap.get(flightID).getFlightTotalAirlineFee() + minerFee;
-                        flightTotalSecurityFee = flightMap.get(flightID).getFlightTotalSecurityFee() + (securityFee * ticketQuantity);
-                        flightTotalTax = flightMap.get(flightID).getFlightTotalTax() + totalTax;
-                        flightMap.get(flightID).setSavings(savings);
-                        flightMap.get(flightID).setFlightTotalAirlineFee(flightTotalAirlineFee);
-                        flightMap.get(flightID).setFlightTotalSecurityFee(flightTotalSecurityFee);
-                        flightMap.get(flightID).setFlightTotalTax(flightTotalTax);
+                            //Update Amount Values
+                            double mainRevenue = flightMap.get(flightID).getTotalMainCabinRevenue() + totalAfterTax;
+                            flightMap.get(flightID).setTotalMainCabinRevenue(mainRevenue);
 
-                        String currentAirport = flightMap.get(flightID).getOriginCode();
-                        totalAirportFees = airportMap.get(currentAirport).getAirportTotalFees() + originFee + destinationFee;
-                        airportMap.get(currentAirport).setAirportTotalFees(totalAirportFees);
+                            int firstSeats = flightMap.get(flightID).getMainCabinSeatsSold() + seatsPurchased;
+                            flightMap.get(flightID).setMainCabinSeatsSold(firstSeats);
+
+                            //Update Taxes and fees
+                            savings = flightMap.get(flightID).getSavings() + savings;
+                            flightTotalAirlineFee = flightMap.get(flightID).getFlightTotalAirlineFee() + minerFee;
+                            flightTotalSecurityFee = flightMap.get(flightID).getFlightTotalSecurityFee() + (securityFee * ticketQuantity);
+                            flightTotalTax = flightMap.get(flightID).getFlightTotalTax() + totalTax;
+                            flightMap.get(flightID).setSavings(savings);
+                            flightMap.get(flightID).setFlightTotalAirlineFee(flightTotalAirlineFee);
+                            flightMap.get(flightID).setFlightTotalSecurityFee(flightTotalSecurityFee);
+                            flightMap.get(flightID).setFlightTotalTax(flightTotalTax);
+
+                            String currentAirport = flightMap.get(flightID).getOriginCode();
+                            totalAirportFees = airportMap.get(currentAirport).getAirportTotalFees() + originFee + destinationFee;
+                            airportMap.get(currentAirport).setAirportTotalFees(totalAirportFees);
         
-                        confirmationNumber = confirmationNumber + 1;
-                        int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
-                        customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
-                    }else
-                        System.out.println("Insufficient Funds for transaction" + i);
-                }else 
-                    System.out.println("No seats available for transaction " + i);
+                            confirmationNumber = confirmationNumber + 1;
+                            int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
+                            customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
+
+                            System.out.println("Ticket bought");
+
+                        }else
+                            System.out.println("Insufficient Funds for transaction " + i);
+                    }else 
+                        System.out.println("No seats available for transaction " + i);
+
+                } else{
+                    System.out.println("No type found");
+                }
+                    
+                }
 
             }
             
         }
-
     }
 }

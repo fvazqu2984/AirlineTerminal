@@ -58,9 +58,11 @@ public class CsvWriter {
   
         StringBuilder stringBuilder = new StringBuilder();
         
+        //Creates header line of customer csv
         stringBuilder.append("ID").append(",").append("First Name").append(",").append("Last Name").append(",").append("DOB").append(",").append("Role").append(",")
         .append("Money Available").append(",").append("Flights Purchased").append(",").append("MineAir Membership").append(",").append("Username").append(",").append("Password").append("\n");
 
+        //Traverses final customer map with updated files and add them to updated customer csv
         for(int i  = 1; i <= customerMap.size(); i++ ){
 
             stringBuilder.append(customerMap.get(i).getID()).append(",").append(customerMap.get(i).getFirstName()).append(",").append(customerMap.get(i).getLastName()).append(",")
@@ -78,12 +80,20 @@ public class CsvWriter {
         }
     }
 
+    /**
+     * Method that writed a txt file containing an electronic ticket for the specified customer
+     * @param filename Name of the file
+     * @param flightTicketList Hashmap containing list of all tickets
+     * @param flightMap Hashmap containing flight objects
+     * @param customerSearch Username of customer being searched
+     */
     public static void writeElectronicTicket(String filename, HashMap<Integer,Ticket> flightTicketList, HashMap<Integer, Flight> flightMap, String customerSearch) {
   
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(customerSearch).append("\n");
 
+        //Traverses entire ticket list to add tickets to the electronic ticket summary if the username provided and on the ticket match
         for(int i =1; i<flightTicketList.size(); i++){
             if(flightTicketList.get(i).getUserName().equals(customerSearch)){
                 int flightID = flightTicketList.get(i).getFlightID();

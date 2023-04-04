@@ -1,0 +1,14 @@
+franciscovazquez
+Confirmation Number: 77
+Origin Code: ELP
+Origin Airport: El Paso International Airport
+Destination Code: DFW
+Destination Airport: Dallas/Ft. Worth International Airport
+Departure Date: 3/28/23
+Departure Time: 5:30 AM
+Arrival Date: 3/28/23
+Arrival Time: 8:04 AM
+Ticket Type: Business Class
+Ticket Quantity: 0
+Total Cost: 1119.2508750000004
+ 

@@ -1,0 +1,14 @@
+plutodisney
+Confirmation Number: 48
+Origin Code: ELP
+Origin Airport: El Paso International Airport
+Destination Code: LAX
+Destination Airport: Los Angeles International Airport
+Departure Date: 3/24/23
+Departure Time: 5:30 AM
+Arrival Date: 3/24/23
+Arrival Time: 6:23 AM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 1456.1790000000003
+ 
