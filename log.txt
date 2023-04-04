@@ -1,5 +1,1 @@
-User mickeymouse logged in as a Customer
-User printed the information for flight 1263
-User mickeymouse bought tickets for FlightID 1263
-mickeymouse has signed out
-User franciscovazquez logged in as a Employee
+User terminated program

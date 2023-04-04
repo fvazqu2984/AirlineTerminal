@@ -83,7 +83,7 @@ ID,First Name,Last Name,DOB,Role,Money Available,Flights Purchased,MineAir Membe
 63,Alejandro,Olivas,5/12/92,Employee,1108.86,0,true,alejandroolivas,Fun!23
 46,Ruben,CarmonaMedrano,2/10/93,Employee,2272.19,0,true,rubencarmonamedrano,Fun!23
 2,Donald,Duck,6/2/93,Customer,1234.96,0,false,donaldduck,Fun!23
-1,Mickey,Mouse,2/17/94,Customer,2621.311375,1,true,mickeymouse,Fun!23
+1,Mickey,Mouse,2/17/94,Customer,2845.01,0,true,mickeymouse,Fun!23
 80,Gabriela,SigalaAcosta,10/3/94,Employee,1914.31,0,false,gabrielasigalaacosta,Fun!23
 8,Cinderella,Disney,4/10/95,Customer,1726.76,0,false,cinderelladisney,Fun!23
 17,Buzz,Lightyear,11/18/95,Customer,2816.17,0,true,buzzlightyear,Fun!23

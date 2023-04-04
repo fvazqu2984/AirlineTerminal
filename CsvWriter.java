@@ -77,6 +77,43 @@ public class CsvWriter {
             System.out.println("Exception e");
         }
     }
+
+    public static void writeElectronicTicket(String filename, HashMap<Integer,Ticket> flightTicketList, HashMap<Integer, Flight> flightMap, String customerSearch) {
+  
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(customerSearch).append("\n");
+
+        for(int i =1; i<flightTicketList.size(); i++){
+            if(flightTicketList.get(i).getUserName().equals(customerSearch)){
+                int flightID = flightTicketList.get(i).getFlightID();
+                
+                stringBuilder.append("Confirmation Number: ").append(flightTicketList.get(i).getConfirmationNumber()).append("\n");
+                stringBuilder.append("Origin Code: ").append(flightMap.get(flightID).getOriginCode()).append("\n");
+                stringBuilder.append("Origin Airport: ").append(flightMap.get(flightID).getOriginAirport()).append("\n");
+                stringBuilder.append("Destination Code: ").append(flightMap.get(flightID).getDestinationCode()).append("\n");
+                stringBuilder.append("Destination Airport: ").append(flightMap.get(flightID).getDestinationAirport()).append("\n");
+                stringBuilder.append("Departure Date: ").append(flightMap.get(flightID).getDepartureDate()).append("\n");
+                stringBuilder.append("Departure Time: ").append(flightMap.get(flightID).getDepartureTime()).append("\n");
+                stringBuilder.append("Arrival Date: ").append(flightMap.get(flightID).getArrivalDate()).append("\n");
+                stringBuilder.append("Arrival Time: ").append(flightMap.get(flightID).getArrivalTime()).append("\n");
+                stringBuilder.append("Ticket Type: ").append(flightTicketList.get(i).getSeatType()).append("\n");
+                stringBuilder.append("Ticket Quantity: ").append(flightTicketList.get(i).getTicketQuantity()).append("\n");
+                stringBuilder.append("Total Cost: ").append(flightTicketList.get(i).getTotalPrice()).append("\n");
+                stringBuilder.append(" ").append("\n");
+
+
+            }
+        }
+
+        try ( FileWriter fileWriter = new FileWriter(filename)) {
+         
+         fileWriter.write(stringBuilder.toString());
+         
+        } catch(Exception e) {
+            System.out.println("Exception e");
+        }
+    }
       
 }
       

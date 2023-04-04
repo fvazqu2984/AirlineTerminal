@@ -109,8 +109,6 @@ public class Airport {
         System.out.println("Airport Fee: " + getAirportFee());
         System.out.println("Airport Lounge: " + getAirportLounge());
         System.out.println("Total Amount from Fees: " + getAirportTotalFees());
-
-        ///....add rest of info
     }
 
 

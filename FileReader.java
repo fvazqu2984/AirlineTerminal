@@ -182,7 +182,40 @@ public class FileReader {
 
     }
 
-    public static void makeInstructionsMap(){
+    public static HashMap<Integer, AutoBuyer> makeInstructionsMap(){
+
+        HashMap<Integer, AutoBuyer> instructionMap = new HashMap<>();
+
+        try{
+            Scanner sc = new Scanner(new File("/Users/frank/PA4/AutoPurchaser10K.csv"));
+            sc.nextLine();
+            sc.useDelimiter(",|\\r\\n");
+
+            int arrayIndex = 1;
+
+            while (sc.hasNextLine()) {
+                String firstName = sc.next();
+                String lastName = sc.next();
+                String action = sc.next();
+                int flightID = sc.nextInt();
+                String originAirport = sc.next();
+                String destinationAirport = sc.next();
+                String ticketType = sc.next();
+                int ticketQuantity = sc.nextInt();
+
+                //Creates instructions objects and stores then in array
+                instructionMap.put(arrayIndex, new AutoBuyer(firstName, lastName, action, flightID, originAirport, destinationAirport, ticketType, ticketQuantity)); 
+
+                arrayIndex++;
+        }
+
+        sc.close();
+
+        }catch(Exception FileNotFoundException){
+            System.out.println("AutoBuyerFileNotFoundException");
+        }
+
+        return instructionMap;
 
     
     }
