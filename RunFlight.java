@@ -1,10 +1,10 @@
 // Francisco Vazquez
-// March 30, 2023
+// April 4, 2023
 // CS 3331 – Advanced Object-Oriented Programming – Spring 2023
 // Dr. Mejia
 // Programming Assignment 4
 // A program that simulates an airline terminal and lets the customer view multiple flights information, 
-//and also purchase tickets for those flights. Employees are allowed to edit flight information and view amounts.
+//and also purchase tickets for those flights. Employees are allowed to edit flight information and view tickets/amounts.
 //
 // This work was done individually and completely on my own. I did not share, reproduce, or alter any part of this assignment for any purpose.
 // I did not share code, upload this assignment online in any form, or view/received/modified code written from anyone else.
@@ -33,7 +33,6 @@ public class RunFlight{
         HashMap<String, Airport> airportMap = FileReader.makeAirportsMap();
         HashMap<Integer, Customer> customerMap = FileReader.makeCustomerMap();
         HashMap<Integer, Flight> flightMap = FileReader.makeFlightMap();
-        //HashMap<Integer, AutoBuyer> autoInstructionMap = FileReader.makeInstructionsMap();
 
         //Creates file where user actions are going to be logged
         File file1 = new File("log.txt");
@@ -243,6 +242,7 @@ public class RunFlight{
                         }
 
                         while(inElectronicTicketMenu){
+                            inElectronicTicketMenu = false;
 
                             System.out.println("Electronic Ticket Menu");
                             System.out.println("Enter customer username to print ticket");
@@ -255,11 +255,10 @@ public class RunFlight{
                                     break;
                                 }
                             }
-
-                            inElectronicTicketMenu = false;
                         }
 
                         while(inAutoBuyerMenu){
+                            inAutoBuyerMenu = false;
                             System.out.println("Auto Buyer Menu");
                             System.out.println("Select autobuyer file");
                             System.out.println("1.10k");
@@ -286,11 +285,11 @@ public class RunFlight{
                             autoBuySystem(autoInstructionMap, customerMap, flightMap, airportMap, ticketArray, flightTicketList, securityFee, minerFee, confirmationNumber, savings, flightTotalTax, flightTotalAirlineFee, flightTotalSecurityFee, totalAirportFees, pw);
                             System.out.println("All tickets purchased");
                             pw.println(customerMap.get(userIDIndex).getUserName() + " has auto bought all tickets");
-                            inAutoBuyerMenu = false;
 
                         }
 
                         while(inAirportMenu){
+                            inAirportMenu = false;
                             System.out.println("Please enter a valid airport code to view information");
                             String airportInput = sc.next();
 
@@ -312,8 +311,6 @@ public class RunFlight{
                                 }                
                             }
                             pw.println(customerMap.get(userIDIndex).getUserName() + " has vieved airport information");
-
-                            inAirportMenu = false;
                         }
 
                         while(inFlightMenu){

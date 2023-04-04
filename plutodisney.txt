@@ -1,14 +1,27 @@
 plutodisney
-Confirmation Number: 48
-Origin Code: ELP
-Origin Airport: El Paso International Airport
-Destination Code: LAX
-Destination Airport: Los Angeles International Airport
-Departure Date: 3/24/23
-Departure Time: 5:30 AM
-Arrival Date: 3/24/23
-Arrival Time: 6:23 AM
+Confirmation Number: 36
+Origin Code: ORD
+Origin Airport: Chicago International Airport
+Destination Code: ELP
+Destination Airport: El Paso International Airport
+Departure Date: 3/30/23
+Departure Time: 12:10 PM
+Arrival Date: 3/30/23
+Arrival Time: 2:06 PM
 Ticket Type: Main Cabin
 Ticket Quantity: 0
-Total Cost: 1456.1790000000003
+Total Cost: 932.6278749999999
+ 
+Confirmation Number: 375
+Origin Code: CJS
+Origin Airport: Abraham Gonzalez International Airport
+Destination Code: MEX
+Destination Airport: Aeropuerto Internacional Benito Juarez
+Departure Date: 4/6/23
+Departure Time: 8:25 AM
+Arrival Date: 4/6/23
+Arrival Time: 11:47 AM
+Ticket Type: Business Class
+Ticket Quantity: 0
+Total Cost: 10688.821499999998
  
