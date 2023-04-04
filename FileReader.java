@@ -82,24 +82,23 @@ public class FileReader {
         HashMap<Integer, Customer> customerMap = new HashMap<>();
 
         try{
-            Scanner sc = new Scanner(new File("/Users/frank/PA4/CustomerListPA3.csv"));
+            Scanner sc = new Scanner(new File("/Users/frank/PA4/CustomerListPA4.csv"));
             sc.nextLine();
             sc.useDelimiter(",|\\r\\n");
 
             int arrayIndex = 1;
 
             while (sc.hasNextLine()) {
-                String dob = sc.next();
                 String userName = sc.next();
-                double moneyAvailable = sc.nextDouble();
-                String lastName = sc.next();
-                String password = sc.next();
-                String role = sc.next();
                 int id = sc.nextInt();
+                double moneyAvailable = sc.nextDouble();
+                String role = sc.next();
+                String password = sc.next();
                 String firstName = sc.next();
+                String dob = sc.next();
                 int flightsPurchased = sc.nextInt();
                 boolean minerAirMembership = sc.nextBoolean();
-               
+                String lastName = sc.next();
     
                 //Creates customer objects and stores then in array
                 customerMap.put(arrayIndex, new Customer(id,firstName,lastName, dob, role, moneyAvailable,flightsPurchased,minerAirMembership,userName,password)); 
@@ -187,14 +186,15 @@ public class FileReader {
 
     /**
      * Method that creates a hashmap with instructions objects
+     * @param fileName Takes in a name of the selected file
      * @return Returns hashmap with instructions objects
      */
-    public static HashMap<Integer, AutoBuyer> makeInstructionsMap(){
+    public static HashMap<Integer, AutoBuyer> makeInstructionsMap(String fileName){
 
         HashMap<Integer, AutoBuyer> instructionMap = new HashMap<>();
 
         try{
-            File file = new File("/Users/frank/PA4/AutoPurchaser10K.csv");
+            File file = new File(fileName);
             Scanner sc = new Scanner(file);
             sc.nextLine();
             sc.useDelimiter(",|\r?\n"); 

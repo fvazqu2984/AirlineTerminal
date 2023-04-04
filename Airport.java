@@ -200,11 +200,4 @@ public class Airport {
         System.out.println("Total Amount from Fees: " + getAirportTotalFees());
     }
 
-
-
-    
-
-
-
-    
 }

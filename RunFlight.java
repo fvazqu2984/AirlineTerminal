@@ -33,7 +33,7 @@ public class RunFlight{
         HashMap<String, Airport> airportMap = FileReader.makeAirportsMap();
         HashMap<Integer, Customer> customerMap = FileReader.makeCustomerMap();
         HashMap<Integer, Flight> flightMap = FileReader.makeFlightMap();
-        HashMap<Integer, AutoBuyer> autoInstructionMap = FileReader.makeInstructionsMap();
+        //HashMap<Integer, AutoBuyer> autoInstructionMap = FileReader.makeInstructionsMap();
 
         //Creates file where user actions are going to be logged
         File file1 = new File("log.txt");
@@ -261,8 +261,30 @@ public class RunFlight{
 
                         while(inAutoBuyerMenu){
                             System.out.println("Auto Buyer Menu");
-                            autoBuySystem(autoInstructionMap, customerMap, flightMap, airportMap, ticketArray, flightTicketList, securityFee, minerFee, confirmationNumber, savings, flightTotalTax, flightTotalAirlineFee, flightTotalSecurityFee, totalAirportFees);
-                            System.out.println("All tickets bought");
+                            System.out.println("Select autobuyer file");
+                            System.out.println("1.10k");
+                            System.out.println("2.100k");
+                            System.out.println("3.400k");
+
+                            int userFileInput = sc.nextInt();
+                            String fileName = " "; 
+
+                            if(userFileInput == 1){
+                                fileName = "/Users/frank/PA4/AutoPurchaser10K.csv";
+                            } else if(userFileInput == 2){
+                                fileName = "/Users/frank/PA4/AutoPurchaser100K.csv";
+                            } else if(userFileInput == 3){
+                                fileName = "/Users/frank/PA4/AutoPurchaser400K.csv";
+                            } else{
+                                System.out.println("Incorrect input");
+                                break;
+                            }
+
+                            HashMap<Integer, AutoBuyer> autoInstructionMap = FileReader.makeInstructionsMap(fileName);
+
+                            System.out.println("Please wait a moment for all tickets to be purchased...");
+                            autoBuySystem(autoInstructionMap, customerMap, flightMap, airportMap, ticketArray, flightTicketList, securityFee, minerFee, confirmationNumber, savings, flightTotalTax, flightTotalAirlineFee, flightTotalSecurityFee, totalAirportFees, pw);
+                            System.out.println("All tickets purchased");
                             pw.println(customerMap.get(userIDIndex).getUserName() + " has auto bought all tickets");
                             inAutoBuyerMenu = false;
 
@@ -1067,16 +1089,13 @@ public class RunFlight{
      * @param flightTotalSecurityFee Total amount collected from security fees
      * @param totalAirportFees Total amount of fees collected per airport
      */
-    public static void autoBuySystem(HashMap<Integer, AutoBuyer> autoInstructionsMap, HashMap<Integer, Customer> customerMap, HashMap<Integer, Flight> flightMap, HashMap<String, Airport> airportMap, HashMap<Integer,Ticket> ticketArray, HashMap<Integer,Ticket> flightTicketList, double securityFee, double minerFee, int confirmationNumber, double savings, double flightTotalTax, double flightTotalAirlineFee, double flightTotalSecurityFee, double totalAirportFees){
+    public static void autoBuySystem(HashMap<Integer, AutoBuyer> autoInstructionsMap, HashMap<Integer, Customer> customerMap, HashMap<Integer, Flight> flightMap, HashMap<String, Airport> airportMap, HashMap<Integer,Ticket> ticketArray, HashMap<Integer,Ticket> flightTicketList, double securityFee, double minerFee, int confirmationNumber, double savings, double flightTotalTax, double flightTotalAirlineFee, double flightTotalSecurityFee, double totalAirportFees, PrintWriter pw){
 
         String userName = "";
         int userIDIndex = 0;
         double totalPrice = 0;
         double flightSurcharge = 0;
-        System.out.println(autoInstructionsMap.size());
-
-
-    
+ 
         for(int i = 1; i<= autoInstructionsMap.size(); i++){
 
             //Find username based on name
@@ -1087,9 +1106,7 @@ public class RunFlight{
                 if(autoName.equals(customerName)){
                     userName = customerMap.get(j).getUserName();
                     userIDIndex = customerMap.get(j).getID();
-                    System.out.println("Username auto buy: " + userName + " " + autoInstructionsMap.get(i).getTicketType());
-                    
-
+        
                     int flightID = autoInstructionsMap.get(i).getFlightID();
                     String ticketType = autoInstructionsMap.get(i).getTicketType();
                     int ticketQuantity = autoInstructionsMap.get(i).getTicketQuantity();
@@ -1171,11 +1188,11 @@ public class RunFlight{
                             int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
                             customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
 
-                            System.out.println("Ticket bought");
+                            pw.println(userName + " bought tickets");
                         }else
-                            System.out.println("Insufficient Funds for transaction " + i);
+                            pw.println("Insufficient Funds for transaction " + i);
                     }else 
-                        System.out.println("No seats available for transaction " + i);
+                        pw.println("No seats available for transaction " + i);
 
                 }else if(ticketType.equals("Business Class")){
                     if(flightMap.get(flightID).getFlightType().equals("International")){
@@ -1252,11 +1269,11 @@ public class RunFlight{
                             int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
                             customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
 
-                            System.out.println("Ticket bought");
+                            pw.println(userName + " bought tickets");
                         }else
-                            System.out.println("Insufficient Funds for transaction " + i);
+                            pw.println("Insufficient Funds for transaction " + i);
                     }else 
-                        System.out.println("No seats available for transaction " + i);
+                        pw.println("No seats available for transaction " + i);
 
                 }else if(ticketType.equals("Main Cabin")){
                     if(flightMap.get(flightID).getFlightType().equals("International")){
@@ -1333,15 +1350,14 @@ public class RunFlight{
                             int flightsPurchased = 1 + customerMap.get(userIDIndex).getFlightsPurchased();
                             customerMap.get(userIDIndex).setFlightsPurchased(flightsPurchased);
 
-                            System.out.println("Ticket bought");
+                            pw.println(userName + " bought tickets");
 
                         }else
-                            System.out.println("Insufficient Funds for transaction " + i);
-                    }else 
-                        System.out.println("No seats available for transaction " + i);
-
+                            pw.println("Insufficient Funds for transaction " + i);
+                        }else 
+                        pw.println("No seats available for transaction " + i);
                 } else{
-                    System.out.println("No type found");
+                    pw.println("No type found");
                 }
                     
                 }

@@ -1,14 +1,157 @@
 franciscovazquez
-Confirmation Number: 77
+Confirmation Number: 2502
+Origin Code: ORL
+Origin Airport: Orlando International Airport
+Destination Code: LAX
+Destination Airport: Los Angeles International Airport
+Departure Date: 3/30/23
+Departure Time: 8:25 AM
+Arrival Date: 3/30/23
+Arrival Time: 10:06 AM
+Ticket Type: First Class
+Ticket Quantity: 0
+Total Cost: 1600.313875
+ 
+Confirmation Number: 2773
 Origin Code: ELP
 Origin Airport: El Paso International Airport
-Destination Code: DFW
-Destination Airport: Dallas/Ft. Worth International Airport
-Departure Date: 3/28/23
+Destination Code: LAX
+Destination Airport: Los Angeles International Airport
+Departure Date: 3/24/23
 Departure Time: 5:30 AM
-Arrival Date: 3/28/23
-Arrival Time: 8:04 AM
+Arrival Date: 3/24/23
+Arrival Time: 6:23 AM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 2093.500875
+ 
+Confirmation Number: 2821
+Origin Code: ELP
+Origin Airport: El Paso International Airport
+Destination Code: LAX
+Destination Airport: Los Angeles International Airport
+Departure Date: 4/1/23
+Departure Time: 12:10 PM
+Arrival Date: 4/1/23
+Arrival Time: 1:03 PM
+Ticket Type: First Class
+Ticket Quantity: 0
+Total Cost: 737.453125
+ 
+Confirmation Number: 2861
+Origin Code: LAX
+Origin Airport: Los Angeles International Airport
+Destination Code: BOS
+Destination Airport: Boston Logan International Airport
+Departure Date: 4/4/23
+Departure Time: 8:25 AM
+Arrival Date: 4/4/23
+Arrival Time: 4:51 PM
 Ticket Type: Business Class
 Ticket Quantity: 0
-Total Cost: 1119.2508750000004
+Total Cost: 2575.8628750000003
+ 
+Confirmation Number: 3120
+Origin Code: ELP
+Origin Airport: El Paso International Airport
+Destination Code: CUN
+Destination Airport: Cancun International Airport
+Departure Date: 3/27/23
+Departure Time: 12:10 PM
+Arrival Date: 3/27/23
+Arrival Time: 5:20 PM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 431.646875
+ 
+Confirmation Number: 3372
+Origin Code: BOS
+Origin Airport: Logan International Airport
+Destination Code: LAX
+Destination Airport: Los Angeles International Airport
+Departure Date: 3/29/23
+Departure Time: 8:25 AM
+Arrival Date: 3/29/23
+Arrival Time: 10:51 AM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 872.4408749999999
+ 
+Confirmation Number: 3484
+Origin Code: DFW
+Origin Airport: Dallas/Ft. Worth International Airport
+Destination Code: ELP
+Destination Airport: El Paso International Airport
+Departure Date: 4/2/23
+Departure Time: 12:10 PM
+Arrival Date: 4/2/23
+Arrival Time: 12:44 PM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 192.955625
+ 
+Confirmation Number: 3494
+Origin Code: ELP
+Origin Airport: El Paso International Airport
+Destination Code: JFK
+Destination Airport: John F. Kennedy International Airport
+Departure Date: 4/2/23
+Departure Time: 8:25 AM
+Arrival Date: 4/2/23
+Arrival Time: 2:41 PM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 362.58337499999993
+ 
+Confirmation Number: 3735
+Origin Code: ELP
+Origin Airport: El Paso International Airport
+Destination Code: LAX
+Destination Airport: Los Angeles International Airport
+Departure Date: 3/29/23
+Departure Time: 12:10 PM
+Arrival Date: 3/29/23
+Arrival Time: 1:03 PM
+Ticket Type: First Class
+Ticket Quantity: 0
+Total Cost: 2790.0896250000005
+ 
+Confirmation Number: 3987
+Origin Code: DFW
+Origin Airport: Dallas/Ft. Worth International Airport
+Destination Code: ELP
+Destination Airport: El Paso International Airport
+Departure Date: 4/5/23
+Departure Time: 12:10 PM
+Arrival Date: 4/5/23
+Arrival Time: 12:44 PM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 236.796875
+ 
+Confirmation Number: 4851
+Origin Code: ATL
+Origin Airport: Hartsfield-Jackson Atlanta International Airport
+Destination Code: ELP
+Destination Airport: El Paso International Airport
+Departure Date: 4/2/23
+Departure Time: 8:25 AM
+Arrival Date: 4/2/23
+Arrival Time: 9:26 AM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 1139.710125
+ 
+Confirmation Number: 5093
+Origin Code: LAX
+Origin Airport: Los Angeles International Airport
+Destination Code: ELP
+Destination Airport: El Paso International Airport
+Departure Date: 4/1/23
+Departure Time: 12:10 PM
+Arrival Date: 4/1/23
+Arrival Time: 3:03 PM
+Ticket Type: Main Cabin
+Ticket Quantity: 0
+Total Cost: 393.4346249999999
  
