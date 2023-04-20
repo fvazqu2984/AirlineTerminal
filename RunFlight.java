@@ -608,7 +608,6 @@ public class RunFlight{
             String customerPassword = customerMap.get(userID).getPassword();
 
             if(passwordInput.equals(customerPassword)){
-                System.out.println("Your password is: " + passwordInput);
                 loggedIn = true;
             } else{
                 System.out.println("Incorrect Password ");
